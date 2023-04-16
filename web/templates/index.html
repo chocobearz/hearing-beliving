@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Edyson</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css">
+        <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='css/style.css') }}>
+        <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            function showLoadingGif(){
+                $("#loading").show()
+                $("#content").hide()
+            }
+
+            function activateProcessButton(){
+                console.log("hej");
+                $("input[id=submitNewAudio]").prop("disabled", false);
+            }
+
+        </script>
+    </head>
+    <body>
+        <div id="loading"></div>
+        <nav class="navbar navbar-light" style="background-color: #43cbb9;">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="navbar-brand" href="#">Ilona is a good dog</a>
+            </li>
+        </ul>
+    </nav>
+        <div class="container" id="content">
+            <div class="jumbotron">
+                <h1>Hearing is Beliving</h1>
+                <h5>Explore your audio with unsupervised machine learning</h5>
+                <p>Based off of the <a href="https://github.com/perfall/Edyson"> Edyson</a> audio visualizer</p>
+            </div>
+            <br>
+            <h5>Enter the name of your features file</h5>
+            <form action = "process_audio" method="POST" enctype=multipart/form-data>
+                <input name="text">
+                <input type="submit" id="submitNewAudio" class="btn btn-info" value="Process audio" onclick="showLoadingGif()">
+            </form>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,200 @@
+source<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Edyson</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css">
+    <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='css/style.css') }}>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/BufferLoader.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div id="loading"></div>
+    <div id="floatingCircle"></div>
+    <nav class="navbar navbar-light" style="background-color: #43cbb9;">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="navbar-brand" >Ilona is a good dog</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style='color:white' href="/">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style='color:white' href="https://github.com/perfall/Temporally-Disassembled-Audio">GitHub</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" style='color:white' href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Automatic clustering
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="buttonGroup9">
+                    <h5 class="dropdown-header">K-means cluster size</h5>
+                    <button type="button" value="none" class="btn-block btn btn-light btn-sm">None</button>
+                    <button type="button" value="kcolor2" class="btn-block btn btn-light btn-sm">2</button>
+                    <button type="button" value="kcolor3" class="btn-block btn btn-light btn-sm">3</button>
+                    <button type="button" value="kcolor4" class="btn-block btn btn-light btn-sm">4</button>
+                    <button type="button" value="kcolor5" class="btn-block btn btn-light btn-sm">5</button>
+                    <button type="button" value="kcolor6" class="btn-block btn btn-light btn-sm">6</button>
+                    <button type="button" value="kcolor7" class="btn-block btn btn-light btn-sm">7</button>
+                    <button type="button" value="kcolor8" class="btn-block btn btn-light btn-sm">8</button>
+                    <button type="button" value="kcolor20" class="btn-block btn btn-light btn-sm">20</button>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" style='color:white' href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Datapoints
+                </a>
+                <div class="dropdown-menu nonCollapsableDropdown"  aria-labelledby="navbarDropdown" id="snippetPropertiesGroup">
+                    <h5>Radius</h5>
+                    <div class="input-group top-buffer-xs">
+                        <div class="input-group-prepend lockButton">
+                            <button type="button" color="blue" value="minusRadius" class="btn-block btn btn-dark btn-sm">
+                            <i class="fa fa-minus" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <input type="text" id="snippetRadius" class="form-control" value="12">
+                        <div class="input-group-prepend lockButton">
+                            <button type="button" color="blue" value="plusRadius" class="btn-block btn btn-dark btn-sm">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <h5 class="top-buffer-xs">Opacity</h5>
+                    <div class="input-group top-buffer-xs">
+                        <div class="input-group-prepend lockButton">
+                            <button type="button" color="blue" value="minusOpacity" class="btn-block btn btn-dark btn-sm">
+                            <i class="fa fa-minus" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <input type="text" id="snippetOpacity" class="form-control" value="0.5">
+                        <div class="input-group-prepend lockButton">
+                            <button type="button" color="blue" value="plusOpacity" class="btn-block btn btn-dark btn-sm">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    <div class="container-fluid" id="content">
+        <div class="row top-buffer side-buffer" id="row1">
+            <div class="col-1">
+                <h5 class="top-buffer-sm">Algorithm</h5>
+                <div class="buttonGroup2">
+                    <button type="button" value="tsne" class="btn btn-block btn-success btn-sm">t-SNE</button>
+                    <button type="button" value="pca" class="btn btn-block btn-dark btn-sm">PCA</button>
+                    <button type="button" value="umap" class="btn btn-block btn-dark btn-sm">UMAP</button>
+                    <button type="button" value="iso" class="btn btn-block btn-dark btn-sm">Isomap</button>
+                </div>
+                <h5 class="top-buffer-sm">Grouping</h5>
+                <div class="buttonGroup3">
+                    <button type="button" value="n" class="btn btn-block btn-success btn-sm">None</button>
+                    <button type="button" value="l" class="btn btn-block btn-dark btn-sm">Loudness</button>
+                    <button type="button" value="d" class="btn btn-block btn-dark btn-sm">Distress</button>
+                    <button type="button" value="ld" class="btn btn-block btn-dark btn-sm">Loudness & Distress</button>
+                </div>
+                <h5 class="top-buffer-sm">Affect</h5>
+                <div class="buttonGroup4">
+                    <button type="button" value="off" class="btn btn-block btn-success btn-sm">Off</button>
+                    <button type="button" value="on" class="btn btn-block btn-dark btn-sm">On</button>
+                </div>
+            </div>
+            <div class="col-10">
+                <svg id="map">
+                </svg>
+            </div>
+            <div class="col-1">
+                <div id="metadata">
+                    <h5>Metadata</h5>
+                    <h6>Duration</h6>
+                    <p style="font-size:0.75em;" id="duration">
+                    </p>
+                    <h6>Loudness</h6>
+                    <p style="font-size:0.75em;" id="loudness">
+                    </p>
+                    <h6>Distress</h6>
+                    <p style="font-size:0.75em;" id="distress">
+                    </p>
+                    <h6>Affect</h6>
+                    <p style="font-size:0.75em;" id="affect">
+                    </p>
+                    <h6>Phone position</h6>
+                    <p style="font-size:0.75em;" id="phone_position">
+                    </p>
+                    <h6>Script</h6>
+                    <p style="font-size:0.75em;" id="script">
+                    </p>
+                    <h6>Zero Crossing</h6>
+                    <p style="font-size:0.75em;" id="zero_crossing">
+                    </p>
+                    <h6>Harmonics</h6>
+                    <p style="font-size:0.75em;" id="harmonics">
+                    </p>
+                    <h6>Pauses</h6>
+                    <p style="font-size:0.75em;" id="pauses">
+                    </p>
+                    <h6>Max Intensity</h6>
+                    <p style="font-size:0.75em;" id="max_intensity">
+                    </p>
+                    <h6>Intensity</h6>
+                    <p style="font-size:0.75em;" id="intensity">
+                    </p>
+                    <h6>Pitch</h6>
+                    <p style="font-size:0.75em;" id="pitch">
+                    </p>
+                    <h6>Pitch Range</h6>
+                    <p style="font-size:0.75em;" id="pitch_range">
+                    </p>
+                    <h6>Shimmer</h6>
+                    <p style="font-size:0.75em;" id="shimmer">
+                    </p>
+                    <h6>Jitter</h6>
+                    <p style="font-size:0.75em;" id="jitter">
+                    </p>
+                    <h6>Spectral Slope</h6>
+                    <p style="font-size:0.75em;" id="spectral_slope">
+                    </p>
+                    <h6>Mean MFCC</h6>
+                    <p style="font-size:0.75em;" id="mean_mfcc">
+                    </p>
+                    <h6>Spectral Rolloff</h6>
+                    <p style="font-size:0.75em;" id="spectral_rolloff">
+                    </p>
+                    <h6>Energy</h6>
+                    <p style="font-size:0.75em;" id="energy">
+                    </p>
+                    <h6>Speech Rate</h6>
+                    <p style="font-size:0.75em;" id="speechrate">
+                    </p>
+                    <h6>Datapoints</h6>
+                    <p style="font-size:0.75em;" >{{datapoints}}</p>
+                </div>
+                <h5 class="top-buffer-sm">Sampling</h5>
+                <div id="buttonGroup8" role="group">
+                    <button type="button" value ="10" class="btn btn-dark btn-sm">0.1</button>
+                    <button type="button" value ="2" class="btn btn-dark btn-sm">0.5</button>
+                    <button type="button" value ="1" class="btn btn-success btn-sm">1.0</button>
+                </div>
+            </div>
+        </div>
+        <audio id="audioBar"controls controlsList="nodownload" style="display:none">
+            <source src="{{audioPath}}">
+        </audio>
+    </div>
+    <script type="text/javascript">
+        // Define variables passed from app.py, they are used in js-file
+        var audioDuration = '{{audioDuration}}';
+        var segmentSize = '{{segmentSize}}';
+        var stepSize = '{{stepSize}}';
+        var audioPath = '{{audioPath}}';
+        var sessionKey = '{{session_key}}';
+        var data = {{data | tojson}};
+        var audioPaths = '{{audioPaths}}'.split(",");
+    </script>
+</body>

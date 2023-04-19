@@ -1,7 +1,7 @@
 source<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
-    <title>Edyson</title>
+    <title>Hearing is Beliving</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css">
     <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='css/style.css') }}>
@@ -10,14 +10,13 @@ source<!DOCTYPE html>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-    <script src="{{ url_for('static', filename='js/BufferLoader.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
     <div id="loading"></div>
     <div id="floatingCircle"></div>
-    <nav class="navbar navbar-light" style="background-color: #43cbb9;">
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #43cbb9;">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <a class="navbar-brand" >Ilona is a good dog</a>
@@ -26,7 +25,7 @@ source<!DOCTYPE html>
                 <a class="nav-link" style='color:white' href="/">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" style='color:white' href="https://github.com/perfall/Temporally-Disassembled-Audio">GitHub</a>
+                <a class="nav-link" style='color:white' href="https://github.com/chocobearz/hearing-beliving">GitHub</a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" style='color:white' href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -47,6 +46,19 @@ source<!DOCTYPE html>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" style='color:white' href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                SVM Predictions Filter
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="buttonGroup11">
+                    <h5 class="dropdown-header">Filter</h5>
+                    <button type="button" value="none" class="btn-block btn btn-light btn-sm">None</button>                    
+                    <button type="button" value="cloud" class="btn-block btn btn-light btn-sm">Correct Loudness</button>
+                    <button type="button" value="iloud" class="btn-block btn btn-light btn-sm">Incorrect Loudness</button>
+                    <button type="button" value="cdis" class="btn-block btn btn-light btn-sm">Correct Distress</button>
+                    <button type="button" value="idis" class="btn-block btn btn-light btn-sm">Incorrect Distress</button>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" style='color:white' href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Datapoints
                 </a>
                 <div class="dropdown-menu nonCollapsableDropdown"  aria-labelledby="navbarDropdown" id="snippetPropertiesGroup">
@@ -57,7 +69,7 @@ source<!DOCTYPE html>
                             <i class="fa fa-minus" aria-hidden="true"></i>
                             </button>
                         </div>
-                        <input type="text" id="snippetRadius" class="form-control" value="12">
+                        <input type="text" id="snippetRadius" class="form-control" value="8">
                         <div class="input-group-prepend lockButton">
                             <button type="button" color="blue" value="plusRadius" class="btn-block btn btn-dark btn-sm">
                             <i class="fa fa-plus" aria-hidden="true"></i>
@@ -123,6 +135,12 @@ source<!DOCTYPE html>
                     </p>
                     <h6>Affect</h6>
                     <p style="font-size:0.75em;" id="affect">
+                    </p>
+                    <h6>Predicted Loudness</h6>
+                    <p style="font-size:0.75em;" id="predicted_loudness">
+                    </p>
+                    <h6>Predicted Distress</h6>
+                    <p style="font-size:0.75em;" id="predicted_distress">
                     </p>
                     <h6>Phone position</h6>
                     <p style="font-size:0.75em;" id="phone_position">

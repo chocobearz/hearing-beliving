@@ -7,18 +7,14 @@ import os
 from sklearn.decomposition import PCA
 from sklearn.manifold import Isomap
 from sklearn.manifold import TSNE
-from pydub import AudioSegment
-import csv
 import umap
 from sklearn.cluster import KMeans
-from sklearn.cluster import DBSCAN
+#from sklearn.cluster import DBSCAN
 #from autoencoder import AE
-from scipy import signal
 import pandas as pd
 
 # make this so you can enter the filename
-DIR = "/mnt/c/Users/ptut0/Documents/shouts/Edyson/web/static/data/"
-OUTPUT_DIR = "/mnt/c/Users/ptut0/Documents/shouts/Edyson/web/static/data/"
+DIR = "/mnt/c/Users/ptut0/Documents/shouts/hearing_beliving/web/static/data/"
 
 color_dict = {
     "-1": "black",
@@ -48,9 +44,9 @@ def main(session_key, feature_filename):
   #got rid of getting audio files but may need them to play them?  
   feature_data = pd.read_csv(os.path.join(DIR, feature_filename))
 
-  features = feature_data.drop(['filename', 'duration', 'phone_position', 'script', 'loudness', 'distress', 'affect'],  axis=1)
+  features = feature_data.drop(['filename', 'duration', 'phone_position', 'script', 'loudness', 'distress', 'affect', 'predicted_loudness', 'predicted_distress'],  axis=1)
 
-  output_dir = os.path.join(OUTPUT_DIR, session_key)
+  output_dir = os.path.join(DIR, session_key)
   subprocess.call(["mkdir", output_dir])
 
   # Run data through t-SNE
@@ -142,6 +138,8 @@ def main(session_key, feature_filename):
           "loudness":feature_data['loudness'],
           "distress":feature_data['distress'],
           "affect":feature_data['affect'],
+          "predicted_loudness":feature_data['predicted_loudness'],
+          "predicted_distress":feature_data['predicted_distress'],
           "zero_crossing":feature_data['analyse_zero_crossing'],
           "harmonics":feature_data['analyse_harmonics'],
           "pauses":feature_data['pauses'],

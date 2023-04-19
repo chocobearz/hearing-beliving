@@ -9,7 +9,7 @@ $(document).ready(function () {
     var max = 100; // maximum of x and y
 
     // Radius of floating circle (cursor), also used in stroke-width of points
-    var floatingCircleRadius = 10;
+    var floatingCircleRadius = 8;
 
     // Algorithm used
     var alg = "tsne";
@@ -86,7 +86,7 @@ $(document).ready(function () {
             .attr('cy', function (d) {
                 return yScale(Math.random() * 200 - 100)
             }) // y
-            .attr('r', 12) // radius
+            .attr('r', 8) // radius
             .style('fill', function (d) {
                 return d.color
             }) // color of point
@@ -110,6 +110,12 @@ $(document).ready(function () {
             })
             .attr('affect', function (d) {
                 return d.affect
+            })
+            .attr('predicted_loudness', function (d) {
+                return d.predicted_loudness
+            })
+            .attr('predicted_distress', function (d) {
+                return d.predicted_distress
             })
             .attr('zero_crossing', function (d) {
                 return d.zero_crossing
@@ -210,28 +216,32 @@ $(document).ready(function () {
         const element = document.elementFromPoint(elemX, elemY);
         if (element.tagName === 'circle') {
           const circle = d3.select(element);
-          document.getElementById("loudness").innerText = circle.attr('loudness')
-          document.getElementById("duration").innerText = circle.attr('duration')
-          document.getElementById("distress").innerText = circle.attr('distress')
-          document.getElementById("affect").innerText = circle.attr('affect')
-          document.getElementById("script").innerText = circle.attr('script')
-          document.getElementById("phone_position").innerText = circle.attr('phone_position')
-          document.getElementById("zero_crossing").innerText = circle.attr('zero_crossing')
-          document.getElementById("harmonics").innerText = circle.attr('harmonics')
-          document.getElementById("pauses").innerText = circle.attr('pauses')
-          document.getElementById("max_intensity").innerText = circle.attr('max_intensity')
-          document.getElementById("intensity").innerText = circle.attr('intensity')
-          document.getElementById("pitch").innerText = circle.attr('pitch')
-          document.getElementById("pitch_range").innerText = circle.attr('pitch_range')
-          document.getElementById("shimmer").innerText = circle.attr('shimmer')
-          document.getElementById("jitter").innerText = circle.attr('jitter')
-          document.getElementById("spectral_slope").innerText = circle.attr('spectral_slope')
-          document.getElementById("mean_mfcc").innerText = circle.attr('mean_mfcc')
-          document.getElementById("spectral_rolloff").innerText = circle.attr('spectral_rolloff')
-          document.getElementById("energy").innerText = circle.attr('energy')
-          document.getElementById("speechrate").innerText = circle.attr('speechrate')
+          if (circle.style('visibility') !== "hidden") {
+            document.getElementById("loudness").innerText = circle.attr('loudness')
+            document.getElementById("duration").innerText = circle.attr('duration')
+            document.getElementById("distress").innerText = circle.attr('distress')
+            document.getElementById("affect").innerText = circle.attr('affect')
+            document.getElementById("predicted_loudness").innerText = circle.attr('predicted_loudness')
+            document.getElementById("predicted_distress").innerText = circle.attr('predicted_distress')
+            document.getElementById("script").innerText = circle.attr('script')
+            document.getElementById("phone_position").innerText = circle.attr('phone_position')
+            document.getElementById("zero_crossing").innerText = circle.attr('zero_crossing')
+            document.getElementById("harmonics").innerText = circle.attr('harmonics')
+            document.getElementById("pauses").innerText = circle.attr('pauses')
+            document.getElementById("max_intensity").innerText = circle.attr('max_intensity')
+            document.getElementById("intensity").innerText = circle.attr('intensity')
+            document.getElementById("pitch").innerText = circle.attr('pitch')
+            document.getElementById("pitch_range").innerText = circle.attr('pitch_range')
+            document.getElementById("shimmer").innerText = circle.attr('shimmer')
+            document.getElementById("jitter").innerText = circle.attr('jitter')
+            document.getElementById("spectral_slope").innerText = circle.attr('spectral_slope')
+            document.getElementById("mean_mfcc").innerText = circle.attr('mean_mfcc')
+            document.getElementById("spectral_rolloff").innerText = circle.attr('spectral_rolloff')
+            document.getElementById("energy").innerText = circle.attr('energy')
+            document.getElementById("speechrate").innerText = circle.attr('speechrate')
+          }
         }
-    });
+    })
 
     $(".plot").mousemove(function (ev) {
         drawFloatingCircle(ev);
@@ -290,8 +300,10 @@ $(document).ready(function () {
         const element = document.elementFromPoint(elemX, elemY);
         if (element.tagName === 'circle') {
           const circle = d3.select(element);
-          var audio = new Audio(`http://localhost:3134/static/data/audio/${circle.attr("filename")}`)
-          audio.play();
+          if (circle.style('visibility') !== "hidden") {
+            var audio = new Audio(`http://localhost:3134/static/data/audio/${circle.attr("filename")}`)
+            audio.play();
+          }
         }
     });
 
@@ -361,22 +373,10 @@ $(document).ready(function () {
                     d3.select(this).classed("activePoint", false);
                 }
             })
-
-        d3.selectAll(".rectBar")
-            .classed("activeRectBar", true)
-            .style("visibility", "visible")
-            .each(function (d, i) {
-                if (i % sampling != 0) {
-                    d3.select(this).style("visibility", "hidden")
-                    d3.select(this).classed("activeRectBar", false);
-                }
-            })
-
     });
 
     $("#buttonGroup9 button").on("click", function () {
         colorWithKmeans(this.value);
-
     });
 
     var gradient = 50;
@@ -387,6 +387,10 @@ $(document).ready(function () {
         gradient = this.value;
         $("#gradientSliderText").text("Gradient: " + gradient);
     })
+
+    $("#buttonGroup11 button").on("click", function () {
+        filterPredictions(this.value);
+    });
 
 
     /////////////////////
@@ -495,7 +499,6 @@ $(document).ready(function () {
     }
 
     function colorWithKmeans(clusterValue) {
-        console.log("Kmean coloring")
         points.data(data)
             .style('fill', function (d) {
                 if (clusterValue == "kcolor2") {
@@ -518,6 +521,38 @@ $(document).ready(function () {
                     return d.color
                 }
             })
+    }
+
+    function filterPredictions(filter) {
+        d3.selectAll(".dot")
+        .classed("activePoint", true)
+        .style("visibility", "visible")
+        .each(function (d) {
+            if (filter === 'none') {
+              console.log("none")
+            }
+            if (filter === 'cloud') {
+              if (d.loudness !== d.predicted_loudness) {
+                d3.select(this).style("visibility", "hidden")
+                d3.select(this).classed("activePoint", false);
+              }
+            } else if (filter === 'iloud') {
+              if (d.loudness === d.predicted_loudness) {
+                d3.select(this).style("visibility", "hidden")
+                d3.select(this).classed("activePoint", false);
+              }
+            } else if (filter === 'cdis') {
+              if (d.distress !== d.predicted_distress) {
+                d3.select(this).style("visibility", "hidden")
+                d3.select(this).classed("activePoint", false);
+              }
+            }  else if (filter === 'idis') {
+              if (d.distress === d.predicted_distress) {
+                d3.select(this).style("visibility", "hidden")
+                d3.select(this).classed("activePoint", false);
+              }
+              }
+        })
     }
 
 })

@@ -1,27 +1,18 @@
 # -*- coding: utf-8 -*-
 import os
-import math
 
-from flask import Flask, render_template, request, flash, redirect, jsonify
-from werkzeug.utils import secure_filename
-import subprocess
+from flask import Flask, render_template, request, redirect
 import sys
 sys.path.append("../python")
 sys.path.append("..")
 import time
 import audio_processing
-from flask import send_file
 import csv
 import pandas as pd
-from pathlib import Path  # For writing videos into the data folder
-
-UPLOAD_FOLDER = 'static/uploads/'
-FEATURE_DIR = "/mnt/c/Users/ptut0/Documents/shouts/Edyson/web/static/data/"
+FEATURE_DIR = "/mnt/c/Users/ptut0/Documents/shouts/hearing_beliving/web/static/data/"
 FEATURE_DATA = None
 
 app = Flask(__name__)
-app.secret_key = 'hejhej00'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # with open("examples.txt", "r") as examples_file:
 #     examples = {line.split("\t")[0]:line.split("\t")[1] for line in examples_file}
@@ -57,9 +48,6 @@ def load_browser(session_key) -> str:
             reader = csv.reader(f, skipinitialspace=True)
             header = next(reader)
             data = [{k: v for k, v in zip(header, line)} for line in reader]
-        audioPaths = []
-        for obj in data:
-            audioPaths.append(f"static/data/audio/{obj['filename']}")
         return render_template('audioBrowser.html', 
                                 data=data, 
                                 datapoints=len(data),

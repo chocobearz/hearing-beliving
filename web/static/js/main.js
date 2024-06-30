@@ -439,38 +439,38 @@ $(document).ready(function () {
 
     function changeGrouping() {
         var circle = map.selectAll(".dot").data(data);
+        //circle.style("stroke", function(d) {
+        //    if (group === 'n') {
+        //      return ""
+        //    } else {
+        //      return "#34eb3d"
+        //    }
+        //  })
         circle.style("stroke", function(d) {
-            if (group === 'n') {
-              return ""
-            } else {
-              return "#34eb3d"
-            }
-          })
-        circle.style("stroke-dasharray", function(d) {
               if (group === 'l') {
                 if (d.loudness === "Shouting") {
-                  return ("2, 2")
+                    return "#34eb3d"
                 } else if (d.loudness == "Talking"){
-                  return ("7, 7")
+                    return "#eb34eb"
                 }
-              } else if (group === 'd') {
-                if (d.distress === "Distressed") {
-                    return ("2, 2")
-                  } else if (d.distress == "Not Distressed"){
-                    return ("7, 7")
-                  }
-              } else if (group === 'ld') {
-                if ((d.loudness === "Shouting") && (d.distress === "Distressed")) {
-                    return ("1, 1")
-                  } else if ((d.loudness === "Shouting") && (d.distress === "Not Distressed")){
-                    return ("5, 5")
-                  } else if ((d.loudness === "Talking") && (d.distress === "Distressed")) {
-                    return ("10, 10")
-                  } else if ((d.loudness === "Talking") && (d.distress === "Not Distressed")) {
-                    return ("0, 0")
-                  }
-              }
-            })
+              //} else if (group === 'd') {
+              //  if (d.distress === "Distressed") {
+              //      return ("2, 2")
+              //    } else if (d.distress == "Not Distressed"){
+              //      return ("7, 7")
+              //    }
+              //} else if (group === 'ld') {
+              //  if ((d.loudness === "Shouting") && (d.distress === "Distressed")) {
+              //      return ("1, 1")
+              //    } else if ((d.loudness === "Shouting") && (d.distress === "Not Distressed")){
+              //      return ("5, 5")
+              //    } else if ((d.loudness === "Talking") && (d.distress === "Distressed")) {
+              //      return ("10, 10")
+              //    } else if ((d.loudness === "Talking") && (d.distress === "Not Distressed")) {
+              //      return ("0, 0")
+              //    }
+              //}
+    }})
     }
 
     function changeAffect() {

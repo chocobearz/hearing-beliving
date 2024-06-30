@@ -7,14 +7,14 @@ import os
 from sklearn.decomposition import PCA
 from sklearn.manifold import Isomap
 from sklearn.manifold import TSNE
-import umap
+#import umap
 from sklearn.cluster import KMeans
 #from sklearn.cluster import DBSCAN
 #from autoencoder import AE
 import pandas as pd
 
 # make this so you can enter the filename
-DIR = "/mnt/c/Users/ptut0/Documents/shouts/hearing_beliving/web/static/data/"
+DIR = "C:\\Users\\ptut0\\Documents\\shouts\\hearing_beliving\\web\\static\\\data\\"
 
 color_dict = {
     "-1": "black",
@@ -64,13 +64,15 @@ def main(session_key, feature_filename):
   Y2x, Y2y = zip(*Y2)
 
   # Run data through UMAP
-  run_umap = True
-  if run_umap:
-      Y4 = convert_range(umap.UMAP().fit_transform(features))
-      print("UMAP done")
-  else:
-      Y4 = convert_range(np.array([np.array([random.randint(-50, 50), random.randint(-50, 50)]) for i in range(len(Y2))]))
-
+  #run_umap = True
+  #if run_umap:
+  #    Y4 = convert_range(umap.UMAP().fit_transform(features))
+  #    print("UMAP done")
+  #else:
+  #    Y4 = convert_range(np.array([np.array([random.randint(-50, 50), random.randint(-50, 50)]) for i in range(len(Y2))]))
+#
+  #Y4x, Y4y = zip(*Y4)
+  Y4 = Y2
   Y4x, Y4y = zip(*Y4)
 
   # Run data through isomap

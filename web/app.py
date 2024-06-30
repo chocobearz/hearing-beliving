@@ -9,7 +9,7 @@ import time
 import audio_processing
 import csv
 import pandas as pd
-FEATURE_DIR = "/mnt/c/Users/ptut0/Documents/shouts/hearing_beliving/web/static/data/"
+FEATURE_DIR = "C:\\Users\\ptut0\\Documents\\shouts\\hearing_beliving\\web\\static\\\data\\"
 FEATURE_DATA = None
 
 app = Flask(__name__)
